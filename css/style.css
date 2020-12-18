@@ -39,12 +39,32 @@
     background: #fff;
     border-top: 1px solid #f2f2f2;
     box-shadow: 0px 3px 6px rgba(000,000,000,0.15);
+    z-index: 9999999999999;
 }
 
+@media(max-width: 540px){
+    #modalRifa {
+      position: fixed;
+      display: block;
+      bottom: -120px;
+      -webkit-transition: all 300ms ease;
+      -moz-transition: all 300ms ease;
+      transition: all 300ms ease;
+      left: 0;
+      width: 100%;
+      height: auto;
+      min-height: 90px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      background: #fff;
+      border-top: 1px solid #f2f2f2;
+      box-shadow: 0px 3px 6px rgba(000,000,000,0.15);
+  }
+}
 
 #modalRifa .coluna-1{
 	float: left;
-	width: 48%;
+	width: 46%;
 	text-align: left;
 	padding: 8px;
 	padding-left: 6%;
@@ -60,13 +80,45 @@
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
+    margin-bottom: 11px;
 }
+
+@media(max-width: 540px){
+  #modalRifa .coluna-1 {
+    float: left;
+    width: 40%;
+    text-align: left;
+    padding: 8px;
+    padding-left: 6%;
+}
+#modalRifa .coluna-2 {
+    float: left;
+    width: 43%;
+    text-align: right;
+    padding: 8px;
+}
+  #modalRifa .coluna-1 span{
+      float: left;
+      width: 49px;
+      text-align: center;
+      background: #666;
+      margin-right: 12px;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 9px;
+  }
+}
+
+
+
 
 #modalRifa .coluna-2{
 	float: left;
-	width: 48%;
-	text-align: right;
-	padding: 8px;
+  width: 43%;
+  text-align: right;
+  padding: 8px;
 }
 
 
@@ -76,26 +128,60 @@
     padding-top: 3px;
 }
 
+@media(max-width: 540px){
+  #modalRifa .coluna-2 h3 {
+    font-size: 17px;
+    line-height: 22px;
+    font-weight: normal;
+    padding-top: 3px;
+}
+}
+
 #modalRifa .coluna-2 h3 a{
-	color: #fff !important;
+	    color: #fff !important;
     border-radius: 45.04px;
     border: none !important;
     background: #5CB85C !important;
     outline: none;
     font-weight: normal;
-    padding: 15px;
-    padding-top: 8px;
-    padding-bottom: 10px;
+    padding: 0px;
+    padding-top: 1px;
+    padding-bottom: 4px;
     text-align: center;
     margin-top: -6px;
-    font-size: 14px;
+    font-size: 13px;
     margin-left: 13px;
     float: right !important;
     text-transform: uppercase !important;
     border-radius: 0px !important;
     font-weight: bold !important;
     /* display: inline-block; */
-    width: 210px;
+    width: 196px;
+}
+
+@media(max-width: 540px){
+  #modalRifa .coluna-2 h3 a {
+    color: #fff !important;
+    border-radius: 45.04px;
+    border: none !important;
+    background: #5CB85C !important;
+    outline: none;
+    font-weight: normal;
+    padding: 0px;
+    padding-top: 8px;
+    padding-bottom: 10px;
+    text-align: center;
+    margin-top: -6px;
+    font-size: 12px;
+    margin-left: 13px;
+    float: right !important;
+    text-transform: uppercase !important;
+    border-radius: 0px !important;
+    font-weight: bold !important;
+    /* display: inline-block; */
+    width: 175px;
+    margin-top: 4px;
+  }
 }
 
 .hidden-campo-cotas{
@@ -112,17 +198,23 @@
 *  ------------------------------------------------------------------------------------------------
 */
 .cotas-disponiveis .form-check{
-  display: unset;
-  float: left;
-  padding-left: 0px;
-  width: 50px;
-  font-weight: bold !important;
-  border: 1px solid #ccc;
-  border-radius: 0px;
-  text-align: center;
-  cursor: pointer !important;
-  margin-right: 12px;
-  margin-bottom: 20px;
+    display: unset;
+    float: left;
+    padding-left: 0px;
+    width: 59px;
+    font-weight: bold !important;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    text-align: center;
+    cursor: pointer !important;
+    margin-right: 9px;
+    margin-bottom: 12px;
+}
+
+@media(max-width: 540px){
+   .cotas-disponiveis .form-check{
+    margin-right: 7px;
+   }
 }
 
 .cotas-disponiveis .form-check input{
@@ -147,13 +239,13 @@
 @media(max-width: 540px){
     .cotas-disponiveis .form-check label {
       background: #fff;
-      height: 48px;
-      display: block;
-      width: 100%;
-      padding: 11px;
-      padding-top: 15px;
-      font-size: 12px;
-      cursor: pointer !important;
+    height: 48px;
+    display: block;
+    width: 100%;
+    padding: 11px;
+    padding-top: 15px;
+    font-size: 12px;
+    cursor: pointer !important;
   }
 }
 
@@ -161,6 +253,10 @@
 .cotas-disponiveis .form-check input:checked + label {
   color:#fff;
   background: #283E77;
+
+  height: 53px;
+  margin-bottom: 0;
+  
   -webkit-transition:all 300ms ease;-moz-transition:all 300ms ease;transition:all 300ms ease;
 }
 

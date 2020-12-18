@@ -82,6 +82,25 @@ function modalRifaRodape() {
 */
 function funcao_cotasrifa( $atts ) { 
 
+
+	function coloque_zero($input0){
+        
+        if($input0>=100) return $input0;
+		
+		if($input0<=9):
+		
+		    $input2 = "00".$input0;
+		
+		else:
+
+		  if($input0>=10 && $input0 <= 99) $input2 = "0".$input0;
+
+		endif;
+
+		return $input2;
+
+	}
+
 	$rifa = $atts['rifa'];
     
     $html = '
@@ -97,28 +116,77 @@ function funcao_cotasrifa( $atts ) {
 
     );
 
-    
+    $html_prova = "";
 
     $loop = new WP_Query( $args );
     while ( $loop->have_posts() ) : $loop->the_post(); 
                           
               $cotas = get_field("numero_de_cotas");
-               
+
+              $reservas = get_user_meta( 1, get_the_ID());
+
+              $a = 0;
+              while($a<count($reservas)):
+                
+                 $estado = explode(",",$reservas[$a]);
+
+                 $b = 0;
+                 while($b<count($estado)):
+
+                 	$html_prova = $html_prova.$estado[$b]."#";
+
+                 	$b++;
+                 endwhile;
+
+              	$a++;
+              endwhile;
+
+              $negado = "não";
               $l = 0;
+
               while($l<$cotas):
 
-              $a = $l + 1;
+                            $a = $l + 1;
 
-              $html = $html . '
+                             $d = 0;
+			              while($d<count($reservas)):
+			                
+			                 $estado = explode(",",$reservas[$d]);
 
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="cotas" onchange="selecionarCotaRifa(this.value)" value="'.$a.'" id="cota'.$a.'">
-                  <label class="form-check-label label-um" for="cota'.$a.'">
-                    '.$a.'
-                  </label>
-                </div>
+                              $b = 0;
+				              while($b<count($estado)):
 
-              ';
+				                 	$html_prova = $html_prova.$estado[$b]."#";
+
+				                 	if($a==$estado[$b]):
+				                        
+					                      $negado = "sim";  
+
+				                 	endif;
+
+				                 	$b++;
+				              
+				              endwhile;
+
+				              $d++;
+				             endwhile;
+
+				              if($negado!="sim"):
+
+		                            $html = $html . '
+
+						                <div class="form-check">
+						                  <input class="form-check-input" type="checkbox" name="cotas" onchange="selecionarCotaRifa(this.value)" value="'.coloque_zero($a).'" id="cota'.coloque_zero($a).'">
+						                  <label class="form-check-label label-um" for="cota'.$a.'">
+						                    '.coloque_zero($a).'
+						                  </label>
+						                </div>
+
+						            ';
+
+				              endif;
+
+				              $negado = "não";
 
               $l++;
               endwhile;
@@ -215,10 +283,133 @@ function misha_order_items_column_cnt( $colname ) {
  
 }
 
+/**
+*  ------------------------------------------------------------------------------------------------
+*
+*
+*   SALVAR AS RESERVAS DO USUARIO NO BANCO DE DADOS (DEIXA-LAS INDISPONIVEIS PARA OUTROAS COMPRAS)
+*
+*
+*  ------------------------------------------------------------------------------------------------
+*/
+add_action( 'woocommerce_order_details_before_order_table', 'trusted_shops_thankyou', 15, 1 );
+function trusted_shops_thankyou( $order ) {
+
+   $id_comprador = $order->user_id;
+   $items = $order->get_items(); 
+	foreach ( $items as $item ) {
+
+	        $product_name = $item->get_name();
+	        $product_id = $item->get_product_id();
+	        $qtd = $qtd + $item->get_quantity();
+	        //echo "<br>CHAVE: ".$product_id;
+	}
+
+	$reservas = get_post_meta( $order->get_order_number(), 'billing_cotasescolhidas', true );
+
+    // ID DO PRODUTO, ID DO USUARIO, RESERVAS (SALVAR AS RESERVAS DE UM CLIENTE)
+	add_user_meta( $product_id, "diogenesjunior.ti@gmail.com", $reservas);
+    
+    // ID FAKE, ID DO PRODUTO, RESERVAS (SALVAR DISPONIBILDIADES)
+	add_user_meta( "1", $product_id, $reservas);
+
+
+}
+
+
+/**
+*  ------------------------------------------------------------------------------------------------
+*
+*
+*   FUNÇÕES GERAIS
+*
+*
+*  ------------------------------------------------------------------------------------------------
+*/
+function funcao_buscar_reservas( $atts ) { 
+
+	$id_produto = $atts['produto'];
+    
+    $html = '
+       
+       <form method="post" action="">
+           <input type="email" name="emailConsultaBuscarReservas" placeholder="Digite seu e-mail" required style="border:1px solid #ccc !important;height:38px;box-shadow:none;" />
+       </form>
+
+
+    '; 
+
+    if($_POST["emailConsultaBuscarReservas"]):
+          
+          $usuarios = get_user_by( 'email', $_POST["emailConsultaBuscarReservas"] );
+
+          if($usuarios!=""):
+
+		          $id = $usuarios->ID;
+
+		          $html = $html.'
+		             
+		             <p style="padding-top:12px;">Usuário: '.$_POST["emailConsultaBuscarReservas"].'</p>
+		             <p><b>Suas cotas:</b></p><div class="cotas-disponiveis">
+
+		          ';
+
+		          $reservas = get_user_meta( $id, $id_produto);
+
+          endif;
+
+          $a = 0;
+
+       
+        
+
+          while($a<count($reservas)):
+
+          	$temp = explode(",",$reservas[$a]);
+          	$c = 0;
+
+          	while($c<count($temp)):
+
+          		                if($temp[$c]!=""):
+
+          		                    $html = $html . '
+
+						                <div class="form-check">
+						                  <input class="form-check-input" type="checkbox" name="cotas" value="'.$temp[$c].'" id="cota'.$temp[$c].'">
+						                  <label style="background:#666 !important;color:#fff !important;" class="form-check-label label-um" for="cota'.$temp[$c].'">
+						                    '.$temp[$c].'
+						                  </label>
+						                </div>
+
+						            ';
+
+						        endif;
+
+          		$c++;
+          	endwhile;
+
+          	
+
+          	$a++;
+          endwhile;
+
+          $html = $html . '</div>';
+
+    endif;
+    
+    //
+    //add_user_meta( "1111", "diogenesjunior.ti@gmail.com", "12,13,14,15" );
+    //$html = get_user_meta( "1111", "diogenesjunior.ti@gmail.com" );
+
+    //return print_r($html);
 
 
 
+    return $html;
+		
+}
 
+add_shortcode('buscar_reservas', 'funcao_buscar_reservas');
 
 
 
