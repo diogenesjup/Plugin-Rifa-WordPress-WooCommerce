@@ -106,7 +106,7 @@ function funcao_cotasrifa( $atts ) {
     $html = '
 
          <input type="hidden" id="idDoProdutoInput" value="'.$rifa.'" />
-         <div class="cotas-disponiveis">
+         <div class="cotas-disponiveis" id="cotasDisponiveisSelector">
              
     ';
 
@@ -177,7 +177,7 @@ function funcao_cotasrifa( $atts ) {
 
 						                <div class="form-check">
 						                  <input class="form-check-input" type="checkbox" name="cotas" onchange="selecionarCotaRifa(this.value)" value="'.coloque_zero($a).'" id="cota'.coloque_zero($a).'">
-						                  <label class="form-check-label label-um" for="cota'.$a.'">
+						                  <label class="form-check-label label-um" for="cota'.coloque_zero($a).'">
 						                    '.coloque_zero($a).'
 						                  </label>
 						                </div>
@@ -321,7 +321,7 @@ function trusted_shops_thankyou( $order ) {
 *  ------------------------------------------------------------------------------------------------
 *
 *
-*   FUNÇÕES GERAIS
+*   BUSCAR RESERVAS FEITAS
 *
 *
 *  ------------------------------------------------------------------------------------------------
@@ -410,6 +410,43 @@ function funcao_buscar_reservas( $atts ) {
 }
 
 add_shortcode('buscar_reservas', 'funcao_buscar_reservas');
+
+
+/**
+*  ------------------------------------------------------------------------------------------------
+*
+*
+*   PESQUISA DE COTAS
+*
+*
+*  ------------------------------------------------------------------------------------------------
+*/
+function funcao_pesquisa_cotas() { 
+
+	
+    
+    $html = '
+       
+         
+                                     <!-- BUSCA DE COTAS -->
+                                     <div class="busca-avulsa">
+                                            
+                                         <input type="text" placeholder="Pesquise por um número" onkeyup="filtrotabela();" id="filtroTabela" style="border:1px solid #ccc !important;height:38px;box-shadow:none;">
+                                           
+                                     </div>
+                                     <!-- BUSCA AVULSA -->
+
+
+    '; 
+
+    
+
+
+    return $html;
+		
+}
+
+add_shortcode('pesquisa_cotas', 'funcao_pesquisa_cotas');
 
 
 
